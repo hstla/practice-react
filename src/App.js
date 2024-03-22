@@ -1,25 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+    btnStyle={
+        color: '#fff',
+        border: 'none',
+        padding: "5px 9px",
+        borderRadius: "50%",
+        cursor: "pointer",
+        float: "right",
+    }
+    getStyle = () => {
+        return {
+            padding: "10px",
+            borderBottom: "1px #ccc dotted",
+            textDecoration: "none",
+        };
+    };
+
+    todoData = [
+        {
+            id: "1",
+            title: "공부하기",
+            completed: true,
+        },
+        {
+            id: "2",
+            title: "청소하기",
+            completed: false,
+        },
+    ];
+
+    render() {
+        return (
+            <div className="container">
+                <div className="todoBlock">
+                    <div className="title">
+                        <h1>할 일 목록</h1>
+                    </div>
+                    {this.todoData.map((data) => (
+                        <div style={this.getStyle()} key={data.id}>
+                            <p>
+                                <input type="checkbox" defaultChecked={false}/>
+                                {" "}{data.title}
+                                <button style={this.btnStyle}>x</button>
+                            </p>
+                        </div>
+                    ))}
+
+                    {/*<div style={this.getStyle()}>*/}
+                    {/*    <p>*/}
+                    {/*        <input type="checkbox" defaultChecked={false}/>*/}
+                    {/*        공부하기*/}
+                    {/*        <button style={this.btnStyle}>x</button>*/}
+                    {/*    </p>*/}
+                    {/*</div>*/}
+
+                    {/*<div style={this.getStyle()}>*/}
+                    {/*    <p>*/}
+                    {/*        <input type="checkbox" defaultChecked={false}/>*/}
+                    {/*        청소하기*/}
+                    {/*        <button style={this.btnStyle}>x</button>*/}
+                    {/*    </p>*/}
+                    {/*</div>*/}
+                </div>
+            </div>
+        );
+    }
 }
-
-export default App;
