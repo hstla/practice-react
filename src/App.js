@@ -1,110 +1,50 @@
-import React, { Component } from "react";
+import "./index.css";
+import { useState } from "react";
+import Lists from "./components/Lists";
+import Form from "./components/Form";
 
-export default class App extends Component {
-    state = {
-        todoData: [
-            {
-                id: "1",
-                title: "공부하기",
-                completed: false,
-            },
-            {
-                id: "2",
-                title: "청소하기",
-                completed: false,
-            },
-        ],
-        value: "",
-    };
+const initialTodoData = localStorage.getItem("todoData")
+    ? JSON.parse(localStorage.getItem("todoData"))
+    : [];
 
-    btnStyle={
-        color: '#fff',
-        border: 'none',
-        padding: "5px 9px",
-        borderRadius: "50%",
-        cursor: "pointer",
-        float: "right",
-    }
+function App() {
+    const [todoData, setTodoData] = useState(initialTodoData);
 
-    listStyle = (completed) => {
-      return {
-          padding: '10px',
-          borderBottom: '1px #ccc dotted',
-          textDecoration: completed ? 'line-through' : 'none',
-      };
-    };
+    const [value, setValue] = useState("");
 
-
-    handleClick = (id) => {
-        let newTodoData = this.state.todoData.filter((data) => data.id !== id);
-        this.setState({ todoData: newTodoData });
-    };
-
-    handleChange = (e) => {
-        this.setState({ value: e.target.value });
-    };
-
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         let newTodo = {
             id: Date.now(),
-            title: this.state.value,
+            title: value,
             completed: false,
         };
 
-        this.setState({ todoData: [...this.state.todoData, newTodo], value: "" });
+        setTodoData((prev) => [...prev, newTodo]);
+        localStorage.setItem("todoData", JSON.stringify([...todoData, newTodo]));
+
+        setValue("");
     };
 
-    handleCompletedChange = (id) => {
-        let newTodoData = this.state.todoData.map((data) => {
-           if (data.id === id) {
-               data.completed = !data.completed;
-           }
-           return data;
-        });
-        this.setState({ todoData: newTodoData });
-    }
+    const handleRemoveClick = () => {
+        setTodoData([]);
+        localStorage.setItem("todoData", JSON.stringify([]));
+    };
 
-    render() {
-        return (
-            <div className="container">
-                <div className="todoBlock">
-                    <div className="title">
-                        <h1>할 일 목록</h1>
-                    </div>
-                    {this.state.todoData.map((data) => (
-                        <div style={this.listStyle(data.completed)} key={data.id}>
-                            <p>
-                                <input
-                                    type="checkbox"
-                                    onChange={() => this.handleCompletedChange(data.id)}
-                                    defaultChecked={false}
-                                />
-                                {" "}{data.title}
-                                <button style={this.btnStyle} onClick={() => this.handleClick(data.id)}>x</button>
-                            </p>
-                        </div>
-                    ))}
-
-                    <form style={{ display: 'flex' }} onSubmit={ this.handleSubmit }>
-                        <input
-                            type={"text"}
-                            name={"value"}
-                            style={{ flex: '10', padding: '5px' }}
-                            placeholder={"해야 할 일을 입력하세요."}
-                            value={ this.state.value }
-                            onChange={ this.handleChange }
-                        />
-                        <input
-                            type={"submit"}
-                            value={"입력"}
-                            className={"btn"}
-                            style={{ flex: '1' }}
-                        />
-                    </form>
+    return (
+        <div className="flex items-center justify-center w-screen h-screen bg-blue-100">
+            <div className="w-full p-6 m-4 bg-white rounded shadow md:w-3/4 md:max-w-lg lg:w-3/4 lg:max-w-lg">
+                <div className="flex justify-between mb-3">
+                    <h1>할 일 목록</h1>
+                    <button onClick={handleRemoveClick}>Delete All</button>
                 </div>
+                <Lists todoData={todoData} setTodoData={setTodoData} />
+
+                <Form handleSubmit={handleSubmit} value={value} setValue={setValue} />
             </div>
-        );
-    }
+        </div>
+    );
 }
+
+export default App;
