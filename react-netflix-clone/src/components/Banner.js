@@ -68,17 +68,27 @@ export default function Banner() {
             </header>
         )
     } else {
+        const hasVideos = movie.videos?.results?.length > 0;
+        const videoKey = hasVideos ? movie.videos.results[0].key : null;
+
         return(
             <Container>
                 <HomeContainer>
-                    <Iframe
+                    {videoKey ? (
+                        <Iframe
                         src={`https://www.youtube.com/embed/${movie.videos.results[0].key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie.videos.results[0].key}`}
-                        width="640"    
-                        height="360"
+                        width="1280"
+                        height="720"
                         frameBorder="0"
                         allow="autoplay; fullscreen"
                         allowFullScreen
                     ></Iframe>
+                    ) : (
+                        <VideoUnavailableMessage>Video is not available. Please try again later.</VideoUnavailableMessage>
+                    )}
+                    <ButtonContainer>
+                        <CloseButton onClick={() => setIsClicked(false)}>x</CloseButton>
+                    </ButtonContainer>
                 </HomeContainer>
             </Container>
         );
@@ -103,8 +113,9 @@ const Iframe = styled.iframe`
     width: 100%;
     height: 100%
     z-index: -1;
-    opacity: 0.65;
+    opacity: 0.75;
     border: none;
+    
 
     &::after {
         content: "";
@@ -114,4 +125,39 @@ const Iframe = styled.iframe`
         width: 100%;
         height: 100%;
     }
+`;
+
+const VideoUnavailableMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 40vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 10px;
+  margin: auto;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+const CloseButton = styled.button`
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #555;
+  }
 `;
