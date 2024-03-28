@@ -19,6 +19,7 @@
 .idea/**/contentModel.xml
 
 # Sensitive or high-churn files
+.idea/
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.local.xml
@@ -26,7 +27,6 @@
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
-.idea
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
